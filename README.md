@@ -9,7 +9,7 @@ can be quickly located.
 SublimeLinter has built in linters for the following languages:
 
 * C/C++ - lint via `cppcheck`
-* CoffeeScript - lint via `coffee -s -l`
+* CoffeeScript - lint via `coffeelint -s --csv`
 * CSS - lint via built-in [csslint](http://csslint.net)
 * Git Commit Messages - lint via built-in module based on [A Note About Git Commit Messages](http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html).
 * Haml - syntax check via `haml -c`
@@ -42,9 +42,12 @@ Once you install Package Control, restart ST2 and bring up the Command Palette (
 
 **Without Git:** Download the latest source from [GitHub](https://github.com/SublimeLinter/SublimeLinter) and copy the SublimeLinter folder to your Sublime Text "Packages" directory.
 
-**With Git:** Clone the repository in your Sublime Text "Packages" directory:
+**With Git:** Clone the repository in your Sublime Text "Packages" directory
+and then install git submodules:
 
     git clone https://github.com/SublimeLinter/SublimeLinter.git
+    cd SublimeLinter
+    git submodule update --init
 
 
 The "Packages" directory is located at:
@@ -74,6 +77,9 @@ After installing Node.js, if the Node.js executable ("node" on Mac OS X, "node.e
 cannot be found by SublimeLinter, you may have to set the path to the executable in the
 "sublimelinter\_executable\_map" setting. See the "Configuring" section below for info on
 SublimeLinter settings.
+
+### Coffeelint
+Make sure that the location of the `coffeelint` binary is in your $PATH environment variable.
 
 
 Using
