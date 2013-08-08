@@ -56,6 +56,7 @@ ALL_SETTINGS = [
     'javascript_linter',
     'jshint_options',
     'jslint_options',
+    'coffeelint_config_file',
     'pep8',
     'pep8_ignore',
     'perl_linter',

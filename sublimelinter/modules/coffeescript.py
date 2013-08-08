@@ -1,30 +1,31 @@
-import re
-import os
-
 from base_linter import BaseLinter
 
 CONFIG = {
     'language': 'CoffeeScript',
-    'executable': 'coffee.cmd' if os.name == 'nt' else 'coffee',
-    'lint_args': ['-s', '-l']
+    'executable': 'coffeelint',
+    'lint_args': ['-s', '--csv']
 }
 
 
 class Linter(BaseLinter):
+
+    def _get_lint_args(self, view, code, filename):
+        args = BaseLinter._get_lint_args(self, view, code, filename)
+        config_file = view.settings().get('coffeelint_config_file')
+        if config_file:
+            return args + ['-f', config_file]
+        else:
+            return args
+
     def parse_errors(self, view, errors, lines, errorUnderlines,
                      violationUnderlines, warningUnderlines, errorMessages,
                      violationMessages, warningMessages):
 
         for line in errors.splitlines():
-            match = re.match(r'.*?Error: Parse error on line '
-                             r'(?P<line>\d+): (?P<error>.+)', line)
-            if not match:
-                match = re.match(r'.*?Error: (?P<error>.+) '
-                                 r'on line (?P<line>\d+)', line)
-            if not match:
-                match = re.match(r'[^:]+:(?P<line>\d+):\d+: '
-                                 r'error: (?P<error>.+)', line)
-
-            if match:
-                line, error = match.group('line'), match.group('error')
-                self.add_message(int(line), lines, error, errorMessages)
+            parts = line.split(',')
+            filename, line, level = parts[0:3]
+            message = ''.join(parts[3::])
+            if not line:
+                line = 0
+            messages = warningMessages if level == 'warn' else errorMessages
+            self.add_message(int(line), lines, message, messages)

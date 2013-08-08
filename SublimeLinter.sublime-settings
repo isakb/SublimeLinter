@@ -138,6 +138,9 @@
         110  // line too long
     ],
 
+    // An optional coffeelint config file for coffeelint options.
+    "coffeelint_config_file": "",
+
     // CSSLint options:
     // Each rule can have three values: error|warning|true|false
     // false => rule is disabled.
