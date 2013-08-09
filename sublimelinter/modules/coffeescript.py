@@ -21,10 +21,16 @@ class Linter(BaseLinter):
                      violationUnderlines, warningUnderlines, errorMessages,
                      violationMessages, warningMessages):
 
-        for line in errors.splitlines():
-            parts = line.split(',')
-            filename, line, level = parts[0:3]
-            message = ''.join(parts[3::])
+        splitlines = errors.splitlines()
+        if splitlines[0] == 'path,lineNumber,lineNumberEnd,level,message':
+            # v 0.5.7:
+            splitlines = splitlines[1::]
+            getLineParts = lambda p: (p[0], p[1], p[3], ''.join(p[4::]))
+        else:
+            # v0.5.6:
+            getLineParts = lambda p: (p[0], p[1], p[2], ''.join(p[3::]))
+        for line in splitlines:
+            filename, line, level, message = getLineParts(line.split(','))
             if not line:
                 line = 0
             messages = warningMessages if level == 'warn' else errorMessages
